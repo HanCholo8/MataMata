@@ -1,0 +1,104 @@
+[gd_scene load_steps=8 format=3 uid="uid://bcpfnxjydvf7o"]
+
+[ext_resource type="Script" path="res://Enemy/Enemy.gd" id="1"]
+
+[sub_resource type="CapsuleMesh" id="1"]
+
+[sub_resource type="BoxMesh" id="3"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_depku"]
+resource_name = "Attack"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.261799, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.3, 1)
+}
+
+[sub_resource type="Animation" id="Animation_kaxdp"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h6t1f"]
+_data = {
+"Attack": SubResource("Animation_depku"),
+"RESET": SubResource("Animation_kaxdp")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d4fjw"]
+
+[node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
+collision_layer = 7
+collision_mask = 7
+input_ray_pickable = false
+safe_margin = 3.0
+script = ExtResource("1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 0, 1, 0)
+mesh = SubResource("1")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.652738, -0.340044)
+mesh = SubResource("3")
+
+[node name="agent" type="NavigationAgent3D" parent="."]
+path_desired_distance = 15.0
+target_desired_distance = 3.0
+agent_height_offset = 0.5
+path_max_distance = 15.0
+avoidance_enabled = true
+time_horizon = 44.88
+max_speed = 20.0
+
+[node name="E_RayCast" type="RayCast3D" parent="."]
+process_mode = 1
+transform = Transform3D(400, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.38279, 0)
+target_position = Vector3(0, 0, 20)
+collision_mask = 2
+hit_from_inside = true
+
+[node name="E_RayCast_L" type="RayCast3D" parent="."]
+process_mode = 1
+transform = Transform3D(282.842, 0, -0.707107, 0, 2, 0, 282.842, 0, 0.707107, 0, 1.243, 0)
+target_position = Vector3(0, 0, 20)
+collision_mask = 2
+hit_from_inside = true
+
+[node name="E_RayCast_L2" type="RayCast3D" parent="."]
+process_mode = 1
+transform = Transform3D(375.877, 0, -0.34202, 0, 2, 0, 136.808, 0, 0.939693, 0, 1.27531, 0)
+target_position = Vector3(0, 0, 20)
+collision_mask = 2
+hit_from_inside = true
+
+[node name="E_RayCast_R" type="RayCast3D" parent="."]
+process_mode = 1
+transform = Transform3D(306.417, 0, 0.642789, 0, 2, 0, -257.115, 0, 0.766044, 0, 1.243, 0)
+target_position = Vector3(0, 0, 20)
+collision_mask = 2
+hit_from_inside = true
+
+[node name="E_RayCast_R2" type="RayCast3D" parent="."]
+process_mode = 1
+transform = Transform3D(375.877, 0, 0.34202, 0, 2, 0, -136.808, 0, 0.939693, 0, 1.29582, 0)
+target_position = Vector3(0, 0, 20)
+collision_mask = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_h6t1f")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_d4fjw")
+
+[connection signal="target_reached" from="agent" to="." method="_on_agent_target_reached"]
+[connection signal="velocity_computed" from="agent" to="." method="_on_agent_velocity_computed"]

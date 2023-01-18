@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://bwadhbjpfvsvm"]
+
+[ext_resource type="PackedScene" uid="uid://c7gqmum6ptw6v" path="res://Player/Player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://ctkc7yqdqdtao" path="res://Levels/Main/Geometry/Floor.tscn" id="2"]
+[ext_resource type="Script" path="res://Levels/Main/L_Main.gd" id="4"]
+[ext_resource type="PackedScene" uid="uid://cdn7d5mxwdyks" path="res://Levels/Main/Geometry/Wall.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://bcpfnxjydvf7o" path="res://Enemy/Enemy.tscn" id="7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qlatd"]
+sky_top_color = Color(0.266667, 0.709804, 1, 1)
+sky_horizon_color = Color(0.843137, 0.176471, 0.368627, 1)
+
+[sub_resource type="Sky" id="Sky_s8g7r"]
+sky_material = SubResource("ProceduralSkyMaterial_qlatd")
+
+[sub_resource type="Environment" id="Environment_p3v2a"]
+background_mode = 2
+sky = SubResource("Sky_s8g7r")
+ambient_light_source = 3
+tonemap_mode = 2
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_fli3f"]
+vertices = PackedVector3Array(9.5, 12.25, -19.75, 19.5, 12.25, -19.75, 9.75, 12.25, -20, -9.75, 12.25, -20, -19.5, 12.25, -20, -10, 12.25, -19.75, 9.5, 12.25, -19.75, 9.75, 12.25, -20, 0, 12.25, -20, -0.25, 12.25, -19.75, -9.75, 12.25, -20, -10, 12.25, -19.75, -0.25, 12.25, -19.75, 0, 12.25, -20, -20, 12.25, 9.75, -19.75, 12.25, 19.5, -19.75, 12.25, 9.5, -19.75, 12.25, -10, -20, 12.25, -19.5, -20, 12.25, -9.75, -20, 12.25, 0, -20, 12.25, 9.75, -19.75, 12.25, 9.5, -19.75, 12.25, -0.25, -19.75, 12.25, -0.25, -19.75, 12.25, -10, -20, 12.25, -9.75, -20, 12.25, 0, -9.5, 0.75, -18.75, -18.75, 0.75, -18.75, -18.75, 0.75, -9.5, -18.75, 0.75, 9.5, -18.75, 0.75, 19, -9.5, 0.75, 19, 19, 0.75, -9.5, 19, 0.75, -18.75, 9.5, 0.75, -18.75, 9.5, 0.75, 19, 19, 0.75, 19, 19, 0.75, 9.5, 0, 0.75, -18.75, -9.5, 0.75, -18.75, -18.75, 0.75, -9.5, -18.75, 0.75, 0, -18.75, 0.75, 9.5, -9.5, 0.75, 19, 0, 0.75, 19, 19, 0.75, 0, 19, 0.75, -9.5, 9.5, 0.75, -18.75, 0, 0.75, -18.75, 0, 0.75, 19, 9.5, 0.75, 19, 19, 0.75, 9.5, -18.75, 0.75, 0, -18.75, 0.75, 9.5, 0, 0.75, 19, 19, 0.75, 9.5, 19, 0.75, 0, 0, 0.75, -18.75)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(9, 8, 6), PackedInt32Array(6, 8, 7), PackedInt32Array(13, 12, 10), PackedInt32Array(10, 12, 11), PackedInt32Array(16, 15, 14), PackedInt32Array(19, 18, 17), PackedInt32Array(23, 22, 20), PackedInt32Array(20, 22, 21), PackedInt32Array(27, 26, 24), PackedInt32Array(24, 26, 25), PackedInt32Array(30, 29, 28), PackedInt32Array(33, 32, 31), PackedInt32Array(36, 35, 34), PackedInt32Array(39, 38, 37), PackedInt32Array(41, 40, 42), PackedInt32Array(42, 40, 43), PackedInt32Array(46, 45, 44), PackedInt32Array(48, 47, 49), PackedInt32Array(49, 47, 50), PackedInt32Array(53, 52, 51), PackedInt32Array(55, 54, 56), PackedInt32Array(56, 54, 57), PackedInt32Array(57, 54, 58), PackedInt32Array(58, 54, 59)]
+edge_max_error = 0.41
+
+[node name="L_Main" type="Node3D"]
+script = ExtResource("4")
+
+[node name="Lighting" type="Node" parent="."]
+
+[node name="DirectionalLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-0.866026, -0.433013, 0.25, -0.130227, 0.678084, 0.723356, -0.482743, 0.593888, -0.643628, 0, 5, 0)
+shadow_enabled = true
+shadow_bias = 0.05
+directional_shadow_max_distance = 250.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = SubResource("Environment_p3v2a")
+
+[node name="NavigationMeshInstance" type="NavigationRegion3D" parent="."]
+navmesh = SubResource("NavigationMesh_fli3f")
+
+[node name="ArenaGeometry" type="Node3D" parent="NavigationMeshInstance" groups=["Environment"]]
+
+[node name="Wall1" parent="NavigationMeshInstance/ArenaGeometry" instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, -20)
+
+[node name="Wall2" parent="NavigationMeshInstance/ArenaGeometry" instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, 20)
+
+[node name="Wall3" parent="NavigationMeshInstance/ArenaGeometry" instance=ExtResource("5")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 5.75, 0)
+
+[node name="Wall4" parent="NavigationMeshInstance/ArenaGeometry" instance=ExtResource("5")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 5.75, 0)
+
+[node name="Floor" parent="NavigationMeshInstance/ArenaGeometry" instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+skeleton = NodePath("../../..")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24651, 1.29794, 10.6712)
+
+[node name="Enemy" parent="." instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6851, 0.25, -16.6061)
+
+[node name="Enemy2" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.044142, 0, 0.999025, 0, 1, 0, -0.999025, 0, -0.044142, -15.888, 0.249999, 16.6659)
